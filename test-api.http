@@ -1,0 +1,12 @@
+### Pobierz wszystkie zadania
+GET http://localhost:3000/tasks
+
+### Dodaj nowe zadanie (pamiętaj o pustej linii po nagłówkach!)
+POST http://localhost:3000/tasks
+Content-Type: application/json
+
+{
+  "title": "Nauczyć się NestJS i Angulara",
+  "description": "Zrobić pełny projekt fullstack",
+  "authorId": 1
+}
