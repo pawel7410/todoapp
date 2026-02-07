@@ -1,0 +1,35 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// To jest serce Twojej bazy danych
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String   // Tu będziemy przechowywać hash hasła
+  name      String?
+  tasks     Task[]   // Relacja: jeden użytkownik może mieć wiele zadań
+}
+
+model Task {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  isCompleted Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  
+  // Relacja: każde zadanie musi należeć do jakiegoś użytkownika
+  author      User     @relation(fields: [authorId], references: [id])
+  authorId    Int
+}
