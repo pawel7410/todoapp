@@ -12,6 +12,7 @@ export class TasksService {
   async createTask(data: { title: string; description?: string; authorId: number }) {
     return this.prisma.task.create({
       data,
+      select: { id: true, title: true, description: true },
     });
   }
 }
