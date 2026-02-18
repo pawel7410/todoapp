@@ -10,3 +10,20 @@ Content-Type: application/json
   "description": "Zrobić pełny projekt fullstack",
   "authorId": 1
 }
+
+### ZMIEN STATUS ZADANIA NA UKOŃCZONE
+PATCH http://localhost:3000/tasks/38/status
+Content-Type: application/json
+
+{
+  "isCompleted": true
+}
+
+### REJESTRACJA NOWEGO UŻYTKOWNIKA
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  "email": "pablo23k8@gmail.com",
+  "password": "test1234"
+}
