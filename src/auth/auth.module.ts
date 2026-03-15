@@ -8,9 +8,9 @@ import { AuthController } from './auth.controller';
   providers: [AuthService, PrismaService],
   imports: [
     JwtModule.register({
-      secret: 'your_jwt_secret_key', // // W produkcji trzymaj to w .env!
-      global: true, // Umożliwia używanie JwtService w cał ej aplikacji
-      signOptions: { expiresIn: '1h' }, // Token wygasa po 1 godzinie
+      secret: process.env.JWT_SECRET,
+      global: true,
+      signOptions: { expiresIn: '1h' },
     }),
   ],
   controllers: [AuthController],

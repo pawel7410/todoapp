@@ -1,5 +1,6 @@
 ### Pobierz wszystkie zadania
 GET http://localhost:3000/tasks
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMsImVtYWlsIjoicGFibG8yMzRrOEBnbWFpbC5jb20iLCJpYXQiOjE3NzE2OTAwMDEsImV4cCI6MTc3MTY5MzYwMX0.67VJ6NhNS-gM80VXm7rO8EDzjTpQ42kEgNU9sjnUKCE
 
 ### Dodaj nowe zadanie (pamiętaj o pustej linii po nagłówkach!)
 POST http://localhost:3000/tasks
@@ -24,6 +25,24 @@ POST http://localhost:3000/auth/register
 Content-Type: application/json
 
 {
-  "email": "pablo23k8@gmail.com",
-  "password": "test1234"
+  "email": "pawel.cymbalista@protonmail.com",
+  "password": "haslotestowe"
+}
+
+### LOGOWANIE BŁĘDNE UŻYTKOWNIKA
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@gmail.com",
+  "password": "xtest"
+}
+
+### LOGOWANIE UŻYTKOWNIKA
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "email": "pablo21378@gmail.com",
+  "pass": "test2137"
 }

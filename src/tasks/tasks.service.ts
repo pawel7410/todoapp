@@ -5,18 +5,24 @@ import { PrismaService } from '../prisma/prisma.service'; // upewnij się, że �
 export class TasksService {
   constructor(private prisma: PrismaService) {}
 
-  async getAllTasks() {
+  async getAllTasks(userId: number) {
     return this.prisma.task.findMany({
+      where: { authorId: userId },
       select: { id: true, title: true, description: true, isCompleted: true, createdAt: true },
       orderBy: {
-        createdAt: 'desc', // Dodatkowy bonus: nowsze zadania będą na górze
+        createdAt: 'desc',
       },
     });
   }
 
-  async createTask(data: { title: string; description?: string; authorId: number }) {
+  async createTask(userId: number, data: { title: string; description?: string }) {
     return this.prisma.task.create({
-      data,
+      data: {
+        ...data,
+        author: {
+          connect: { id: userId },
+        },
+      },
       select: { id: true, title: true, description: true },
     });
   }

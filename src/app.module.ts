@@ -5,9 +5,29 @@ import { PrismaModule } from './prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
 import { TasksModule } from './tasks/tasks.module';
 import { AuthModule } from './auth/auth.module';
+import { MailerModule } from '@nestjs-modules/mailer';
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), PrismaModule, TasksModule, AuthModule],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    PrismaModule,
+    TasksModule,
+    AuthModule,
+    MailerModule.forRoot({
+      transport: {
+        host: 'smtp.gmail.com', // Serwer testowy
+        port: 465,
+        secure: true,
+        auth: {
+          user: process.env.MAIL_USER,
+          pass: process.env.MAIL_PASS,
+        },
+      },
+      defaults: {
+        from: '"MyTodoApp" <noreply@mytodoapp.com>',
+      },
+    }),
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

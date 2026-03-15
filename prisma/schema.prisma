@@ -13,7 +13,6 @@ datasource db {
   provider = "postgresql"
 }
 
-// To jest serce Twojej bazy danych
 model User {
   id        Int      @id @default(autoincrement())
   email     String   @unique
@@ -29,7 +28,6 @@ model Task {
   isCompleted Boolean  @default(false)
   createdAt   DateTime @default(now())
   
-  // Relacja: każde zadanie musi należeć do jakiegoś użytkownika
   author      User     @relation(fields: [authorId], references: [id])
   authorId    Int
 }

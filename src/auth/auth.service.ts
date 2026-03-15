@@ -1,24 +1,30 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { log } from 'node:console';
+import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
 export class AuthService {
-  // jwtService = Inject(JwtService);
-  // prisma = Inject(PrismaService);
-
   constructor(
     private jwtService: JwtService,
     private prisma: PrismaService,
+    private mailerService: MailerService,
   ) {}
 
-  // ... wewnątrz klasy AuthService
   async login(email: string, pass: string) {
-    const user = await this.prisma.user.findUnique({ where: { email } });
+    const user = await this.prisma.user.findUnique({
+      where: { email: email.toLowerCase().trim() },
+    });
+    log(email, pass, user);
 
-    if (user && (await bcrypt.compare(pass, user.password))) {
+    if (!user) {
+      throw new UnauthorizedException('user not found');
+    }
+
+    if (await bcrypt.compare(pass, user.password)) {
       const payload = { sub: user.id, email: user.email };
       return {
         access_token: await this.jwtService.signAsync(payload),
@@ -28,12 +34,51 @@ export class AuthService {
   }
 
   async register(email: string, pass: string) {
+    const existingUser = await this.prisma.user.findUnique({ where: { email } });
+    if (existingUser) {
+      throw new ConflictException('Email already in use');
+    }
+
     const hashedPassword = await bcrypt.hash(pass, 10);
-    return this.prisma.user.create({
-      data: {
-        email,
-        password: hashedPassword,
-      },
-    });
+    return this.prisma.user
+      .create({
+        data: {
+          email,
+          password: hashedPassword,
+        },
+        select: { id: true, email: true },
+      })
+      .then((user) => {
+        this.sendWelcomeEmail(user.email);
+        return user;
+      });
+  }
+
+  private async sendWelcomeEmail(userEmail: string) {
+    try {
+      await this.mailerService.sendMail({
+        to: userEmail,
+        subject: 'Witaj w MyTodoApp! 🚀',
+        html: `
+  <div style="background-color: #f3f4f6; padding: 20px; font-family: sans-serif;">
+    <div style="max-width: 600px; margin: 0 auto; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+      <div style="background-color: #4f46e5; padding: 20px; text-align: center;">
+        <h1 style="color: white; margin: 0;">Witaj w MyTodo!</h1>
+      </div>
+      <div style="padding: 30px;">
+        <p>Cześć <b>${userEmail}</b>,</p>
+        <p>Twoje konto jest już aktywne. Cieszymy się, że jesteś z nami!</p>
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="http://localhost:4200/login" style="background-color: #4f46e5; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px;">Zaloguj się do aplikacji</a>
+        </div>
+      </div>
+    </div>
+  </div>
+`,
+      });
+      console.log('E-mail powitalny wysłany do:', userEmail);
+    } catch (error) {
+      console.error('Błąd wysyłki e-maila:', error);
+    }
   }
 }
