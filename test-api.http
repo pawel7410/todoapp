@@ -25,7 +25,7 @@ POST http://localhost:3000/auth/register
 Content-Type: application/json
 
 {
-  "email": "pawel.cymbalista@protonmail.com",
+  "email": "pablo23k8@gmail.com",
   "password": "haslotestowe"
 }
 
