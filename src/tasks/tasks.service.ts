@@ -10,7 +10,7 @@ export class TasksService {
       where: { authorId: userId },
       select: { id: true, title: true, description: true, isCompleted: true, createdAt: true },
       orderBy: {
-        createdAt: 'desc',
+        position: 'asc',
       },
     });
   }
@@ -38,5 +38,16 @@ export class TasksService {
     return this.prisma.task.delete({
       where: { id },
     });
+  }
+
+  async reorder(taskIds: number[]) {
+    return this.prisma.$transaction(
+      taskIds.map((id, index) =>
+        this.prisma.task.update({
+          where: { id },
+          data: { position: index },
+        }),
+      ),
+    );
   }
 }

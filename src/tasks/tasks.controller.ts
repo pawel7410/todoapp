@@ -40,4 +40,9 @@ export class TasksController {
   delete(@Param('id', ParseIntPipe) id: number) {
     return this.tasksService.deleteTask(id);
   }
+
+  @Patch('reorder')
+  async reorderTasks(@Body() taskIds: number[]) {
+    return this.tasksService.reorder(taskIds);
+  }
 }
