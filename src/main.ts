@@ -16,6 +16,13 @@ async function bootstrap() {
       transform: true,
     }),
   );
+
+  app.use((req, res, next) => {
+    console.log(
+      `[REQUEST] ${new Date().toISOString()} - ${req.method} ${req.url} - Agent: ${req.headers['user-agent']}`,
+    );
+    next();
+  });
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
