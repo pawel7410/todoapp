@@ -1,5 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
+import { Headers } from '@nestjs/common';
 
 @Controller()
 export class AppController {
@@ -11,8 +12,8 @@ export class AppController {
   }
 
   @Get('health')
-  getHealth() {
-    console.log('Health check requested');
-    return { status: 'ok', timestamp: new Date().toISOString() };
+  getHealth(@Headers('user-agent') agent: string) {
+    console.log(`[${new Date().toISOString()}] Ping from: ${agent}`);
+    return { status: 'ok' };
   }
 }
