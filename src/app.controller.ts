@@ -1,5 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
+import { log } from 'node:console';
 
 @Controller()
 export class AppController {
@@ -12,6 +13,7 @@ export class AppController {
 
   @Get('health')
   getHealth() {
+    log('Health check requested');
     return { status: 'ok', timestamp: new Date().toISOString() };
   }
 }
