@@ -13,7 +13,7 @@ export class AppController {
 
   @Get('health')
   getHealth() {
-    log('Health check requested');
+    console.log('Health check requested');
     return { status: 'ok', timestamp: new Date().toISOString() };
   }
 }
