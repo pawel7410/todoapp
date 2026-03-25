@@ -28,6 +28,6 @@ model Task {
   isCompleted Boolean  @default(false)
   createdAt   DateTime @default(now())
   position    Int      @default(0)
-  author      User     @relation(fields: [authorId], references: [id])
+  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId    Int
 }
