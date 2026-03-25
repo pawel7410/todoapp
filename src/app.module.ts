@@ -15,17 +15,18 @@ import { MailerModule } from '@nestjs-modules/mailer';
     AuthModule,
     MailerModule.forRoot({
       transport: {
-        host: 'smtp.gmail.com', // Serwer testowy
+        host: '142.251.31.108', // smtp.gmail.com
         port: 465,
-        secure: true, // true dla portu 465, false dla innych
+        secure: true,
+        tls: {
+          servername: 'smtp.gmail.com',
+          rejectUnauthorized: false,
+        },
         auth: {
-          user: process.env.MAIL_USER,
-          pass: process.env.MAIL_PASS,
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS,
         },
         connectionTimeout: 20000,
-        options: {
-          family: 4,
-        },
       } as any,
       defaults: {
         from: '"MyTodoApp" <noreply@mytodoapp.com>',
