@@ -22,7 +22,11 @@ import { MailerModule } from '@nestjs-modules/mailer';
           user: process.env.MAIL_USER,
           pass: process.env.MAIL_PASS,
         },
-      },
+        connectionTimeout: 10000,
+        options: {
+          family: 4,
+        },
+      } as any,
       defaults: {
         from: '"MyTodoApp" <noreply@mytodoapp.com>',
       },
