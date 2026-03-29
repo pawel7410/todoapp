@@ -1,5 +1,15 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { AuthGuard } from './auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -14,5 +24,12 @@ export class AuthController {
   @Post('register')
   register(@Body() registerDto: Record<string, any>) {
     return this.authService.register(registerDto.email, registerDto.password);
+  }
+
+  @Delete('account')
+  @UseGuards(AuthGuard)
+  @HttpCode(HttpStatus.OK)
+  deleteAccount(@Request() req: { user: { sub: number } }) {
+    return this.authService.deleteAccount(req.user.sub);
   }
 }

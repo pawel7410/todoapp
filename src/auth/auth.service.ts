@@ -55,6 +55,13 @@ export class AuthService {
       });
   }
 
+  async deleteAccount(userId: number) {
+    return this.prisma.user.delete({
+      where: { id: userId },
+      select: { id: true, email: true },
+    });
+  }
+
   private async sendWelcomeEmail(userEmail: string) {
     try {
       await this.resend.emails.send({
