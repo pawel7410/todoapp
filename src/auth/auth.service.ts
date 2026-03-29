@@ -4,14 +4,15 @@ import { JwtService } from '@nestjs/jwt';
 import { UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { log } from 'node:console';
-import { MailerService } from '@nestjs-modules/mailer';
+import { Resend } from 'resend';
 
 @Injectable()
 export class AuthService {
+  private resend = new Resend(process.env.RESEND_API_KEY);
+
   constructor(
     private jwtService: JwtService,
     private prisma: PrismaService,
-    private mailerService: MailerService,
   ) {}
 
   async login(email: string, pass: string) {
@@ -56,7 +57,8 @@ export class AuthService {
 
   private async sendWelcomeEmail(userEmail: string) {
     try {
-      await this.mailerService.sendMail({
+      await this.resend.emails.send({
+        from: 'MyTodoApp <noreply@yourdomain.com>',
         to: userEmail,
         subject: 'Witaj w MyTodoApp! 🚀',
         html: `
