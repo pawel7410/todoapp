@@ -78,7 +78,7 @@ export class AuthService {
         <p>Cześć <b>${userEmail}</b>,</p>
         <p>Twoje konto jest już aktywne. Cieszymy się, że jesteś z nami!</p>
         <div style="text-align: center; margin: 30px 0;">
-          <a href="https://todoapp-fe-gules.vercel.app/" style="background-color: #4f46e5; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px;">Zaloguj się do aplikacji</a>
+          <a href="https://pawel7410.pl/" style="background-color: #4f46e5; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px;">Zaloguj się do aplikacji</a>
         </div>
       </div>
     </div>
