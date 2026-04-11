@@ -65,7 +65,7 @@ export class AuthService {
   private async sendWelcomeEmail(userEmail: string) {
     try {
       await this.resend.emails.send({
-        from: 'MyTodoApp <noreply@yourdomain.com>',
+        from: 'MyTodoApp <noreply@pawel7410.pl>',
         to: userEmail,
         subject: 'Witaj w MyTodoApp! 🚀',
         html: `
